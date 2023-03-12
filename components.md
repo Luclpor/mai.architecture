@@ -15,7 +15,7 @@ Person(admin, "Администратор")
 Person(moderator, "Модератор")
 Person(user, "Пользователь")
 
-System_Ext(web_site, "Клиентский веб-сайт", "HTML, CSS, JavaScript", $tags = "web_site")
+System_Ext(web_site, "Клиентский веб-сайт", "HTML, CSS, JavaScript, React", $tags = "web_site")
 
 System_Boundary(service_site, "Сайт заказа услуг") {
    Container(client_service, "Сервис авторизации", "C++", "Сервис управления пользователями", $tags = "microService")    
