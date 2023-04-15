@@ -5,7 +5,7 @@ services:
     build:
       context: mariadb
       dockerfile: Dockerfile
-    container_name: mai-db-node-ex01
+    container_name: mai-db-node
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: archdb
@@ -31,7 +31,7 @@ services:
     build:
       context: auth_service
       dockerfile: Dockerfile
-    container_name: auth_service
+    container_name: auth_servic
     environment:
       - DB_HOST=mai-db-node-ex01
       - DB_PORT=3306
@@ -49,7 +49,7 @@ services:
     build:
       context: service_service
       dockerfile: Dockerfile
-    container_name: service_service
+    container_name: service_servic
     environment:
       - DB_HOST=mai-db-node-ex01
       - DB_PORT=3306
@@ -70,7 +70,7 @@ services:
     build:
       context: order_service
       dockerfile: Dockerfile
-    container_name: order_service
+    container_name: order_servic
     environment:
       - DB_HOST=mai-db-node-ex01
       - DB_PORT=3306
