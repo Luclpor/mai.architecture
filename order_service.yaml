@@ -1,0 +1,115 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Arch Lab Example API'
+  description: Пример API для первого домашнего задания по курсу Архитектура программных систем
+servers:
+  - url: http://localhost:8084
+    description: Order server
+paths:
+  /search:
+    get:
+      summary: Поиск заказа по имени
+      parameters:
+      - name: order_name
+        description: Имя
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The users for the provided masks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/orders'
+        404:
+          description: No user found for the provided mask
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /createorder:
+    post:
+      summary: Добавление нового заказа
+      parameters:
+      - name: order_name
+        description: Имя заказа
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: category
+        description: Категория
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: service_id
+        description: Идентификатор услуги
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Идентификатор, добавленного заказа
+          content:
+            application/json:
+              schema:
+                type: integer
+        404:
+          description: Ошибка добавления заказа
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    order_id:
+      description: Уникальный идентификатор заказа
+      type: integer
+    orders:
+      type: array
+      items:
+        $ref: '#/components/schemas/order'
+    order:
+      type: object
+      required:
+        - id
+        - order_name
+        - category
+        - service_id
+        - order_date
+      properties:
+        id:
+          $ref: '#/components/schemas/order_id'
+        order_name:
+          type: string
+        category:
+          type: string
+        service_id:
+          type: integer
+        order_date:
+          type: string
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: Сообщение о ошибке
+          type: string

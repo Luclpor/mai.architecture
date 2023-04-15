@@ -1,0 +1,132 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Arch Lab Example API'
+  description: Пример API для первого домашнего задания по курсу Архитектура программных систем
+servers:
+  - url: http://localhost:8083
+    description: Service server
+paths:
+  /search:
+    get:
+      summary: Поиск всех услуг
+      responses:
+        '200':
+          description: Services found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/services'
+        404:
+          description: No services found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /createservice:
+    post:
+      summary: Создание новой услуги
+      parameters:
+      - name: service_name
+        description: Имя услуги
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: category
+        description: категория
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: description_service
+        description: описание сервиса
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: portfolio
+        description: Портфолио 
+        in: query
+        required: false
+        schema:
+          type: string
+          default: 
+      - name: price
+        description: цена
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Идентификатор, добавленной услуги
+          content:
+            application/json:
+              schema:
+                type: integer
+        404:
+          description: Ошибка добавления услуги
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    service_id:
+      description: Уникальный идентификатор пользователя
+      type: integer
+    services:
+      type: array
+      items:
+        $ref: '#/components/schemas/service'
+    service:
+      type: object
+      required:
+        - service_name
+        - category
+        - description_service
+        - executor_id
+        - portfolio
+        - price
+      properties:
+        id:
+          $ref: '#/components/schemas/service_id'
+        service_name:
+          type: string
+        category:
+          type: string
+        description_service:
+          type: string
+        executor_id:
+          type: integer
+        portfolio:
+          type: string
+        price:
+          type: integer
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: Сообщение о ошибке
+          type: string
+  securitySchemes:
+      basicAuth:     
+        type: http
+        scheme: basic
+security:
+  - basicAuth: []
