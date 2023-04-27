@@ -6,5 +6,5 @@ RUN git clone -b master https://github.com/pocoproject/poco.git && cd poco && mk
 #RUN git clone https://github.com/DVDemon/hl_mai_lab_01.git
 COPY . .
 RUN sudo ldconfig
-#RUN cd hl_mai_lab_01 && mkdir build && cd build && cmake  .. && make
+RUN mkdir build && cd build && cmake  .. && make && cd ../
 ENTRYPOINT [ "build/order_service" ]  

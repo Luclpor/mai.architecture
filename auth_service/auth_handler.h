@@ -229,6 +229,7 @@ public:
                 Poco::JSON::Array arr;
                 for (auto s : results)
                     arr.add(s.toJSON());//добавляет значение в массив
+                
                 response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
                 response.setChunkedTransferEncoding(true);
                 response.setContentType("application/json");

@@ -1,3 +1,5 @@
+docker-compose stop
+docker-compose rm
 rm -R service_service/build
 rm -R auth_service/build
 rm -R build

@@ -7,6 +7,8 @@
 #include <Poco/Data/MySQL/MySQLException.h>
 #include <Poco/Data/SessionFactory.h>
 #include <Poco/Data/SessionPool.h>
+#include <vector>
+
 
 namespace database{
     class Database{
@@ -17,6 +19,11 @@ namespace database{
         public:
             static Database& get();
             Poco::Data::Session create_session();
+            static size_t get_max_shard();
+            static std::string sharding_hint(std::string login);
+            static std::string sharding_hint_service(long executor_id);     
+            static std::string sharding_hint_login(std::string login);
+            static std::vector<std::string> get_all_hints();
     };
 }
 #endif

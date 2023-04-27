@@ -26,6 +26,8 @@ namespace database
             //get() возвращает объект класса Database
             Poco::Data::Session session = database::Database::get().create_session();
             //вызов конструктора
+            //for (auto &hint : database::Database::get_all_hints())
+            //{
             Statement create_stmt(session);
             create_stmt << "CREATE TABLE IF NOT EXISTS `Service` (`id` INT NOT NULL AUTO_INCREMENT,"
                         << "`service_name` VARCHAR(256) NOT NULL UNIQUE,"
@@ -36,7 +38,10 @@ namespace database
                         << "`price` INT NOT NULL,"
                         << "PRIMARY KEY (`id`),KEY `sn` (`service_name`),KEY `ct` (`category`),"
                         << "FOREIGN KEY (`executor_id`) REFERENCES `Test`(`id`) ON DELETE CASCADE);",
+                        //<<  hint,
                 now;
+            //std::cout << create_stmt.toString() << std::endl;
+            //}
         }
 
         catch (Poco::Data::MySQL::ConnectionException &e)
@@ -128,7 +133,10 @@ namespace database
             Statement select(session);
             std::vector<Service> result;
             Service a;
-            select << "SELECT id, service_name, category, description_service, executor_id, portfolio, price FROM Service",
+            select <<  "SELECT id, service_name, category, description_service, executor_id, portfolio, price FROM Service",
+            //for(int i=0;i<2;++i){
+            //Statement select(session);
+            //select << select_str,
                 into(a._id),
                 into(a._service_name),
                 into(a._category),
@@ -145,6 +153,9 @@ namespace database
                 std::cout<<"read_all"<< std::endl;
                     result.push_back(a);
             }
+            //std::string test = "-- sharding:1";
+            // select_str += test;
+           // }
             return result;
         }
 
@@ -254,8 +265,12 @@ namespace database
         {
             Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement insert(session);
+            //std::string sharding_hint = database::Database::sharding_hint_service(_executor_id);
 
             insert << "INSERT INTO Service (service_name,category,description_service, executor_id, portfolio, price) VALUES(?, ?, ?, ?, ?, ?)",
+            //select_str += sharding_hint;
+            //std::cout << select_str << std::endl;
+            //insert << select_str,
                 use(_service_name),
                 use(_category),
                 use(_description_service),

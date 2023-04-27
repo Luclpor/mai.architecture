@@ -28,6 +28,9 @@ namespace database
 
             Poco::Data::Session session = database::Database::get().create_session();
             Statement create_stmt(session);
+            //for (auto &hint : database::Database::get_all_hints())
+            //{
+                //Statement create_stmt(session);
             create_stmt << "CREATE TABLE IF NOT EXISTS `Orders` (`id` INT NOT NULL AUTO_INCREMENT,"
                         << "`order_name` VARCHAR(256) NOT NULL,"
                         << "`category` VARCHAR(256) NOT NULL,"
@@ -35,8 +38,11 @@ namespace database
                         << "`order_date` DATETIME NOT NULL DEFAULT NOW(),"
                         << "PRIMARY KEY (`id`),"
 						<< "FOREIGN KEY(`service_id`) REFERENCES `Service`(`id`));",
+                       // <<  hint,
 
                 now;
+                //std::cout << create_stmt.toString() << std::endl;
+            //}
         }
 
         catch (Poco::Data::MySQL::ConnectionException &e)
@@ -258,7 +264,7 @@ namespace database
         return {};
     }
 
-    void Order::save_to_mysql()
+   void Order::save_to_mysql()
     {
 
         try
