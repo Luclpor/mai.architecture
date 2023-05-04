@@ -46,6 +46,9 @@ namespace database
             static std::vector<Auth> login_search(std::string login);
             void save_to_mysql();
 
+            void save_to_cache();
+            static std::optional<Auth> read_from_cache_by_id(long id);
+
             Poco::JSON::Object::Ptr toJSON() const;
 
     };

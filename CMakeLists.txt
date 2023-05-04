@@ -5,6 +5,10 @@ project(hl_server C CXX)
 SET (AUTH_SERVICE "auth_service")
 SET(SERVICE_SERVICE "service_service")
 SET(ORDER_SERVICE "order_service")
+set (STD_CXX "c++17")
+set (REDISCPP_FLAGS "-DREDISCPP_HEADER_ONLY=ON")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -std=${STD_CXX} ${REDISCPP_FLAGS}")
+set (CMAKE_CXX_FLAGS_RELEASE "-O3 -g0 -std=${STD_CXX} -Wall -DNDEBUG ${REDISCPP_FLAGS}")
 
 find_package(OpenSSL)
 find_package(Threads)
@@ -21,14 +25,24 @@ include_directories("/usr/include/mysql")
 include_directories("/usr/local/include/mysql")
 link_directories("/usr/local/lib")
 
-SET(CMAKE_CXX_STANDARD 17)
-SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+#SET(CMAKE_CXX_STANDARD 17)
+#SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_executable(load_data load_data.cpp)
+
+target_link_libraries(load_data PRIVATE 
+                             ${CMAKE_THREAD_LIBS_INIT} 
+                             ${Poco_LIBRARIES}
+                             "PocoData"
+                             "PocoDataMySQL"                      
+                             ZLIB::ZLIB)
 
 
 add_executable(${AUTH_SERVICE} auth_main.cpp
                                 config/config.cpp
+                                database/cache.cpp
                                 database/database.cpp
                                 database/auth.cpp)
+
 
 
 target_include_directories(${AUTH_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
@@ -81,6 +95,7 @@ target_link_libraries(${ORDER_SERVICE} PRIVATE
                        "PocoDataMySQL"
                        "mysqlclient"
                        ZLIB::ZLIB)
+
 
 
 

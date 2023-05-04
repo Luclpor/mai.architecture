@@ -1,6 +1,7 @@
 #include "auth.h"
 #include "database.h"
 #include "../config/config.h"
+#include "../database/cache.h"
 
 #include <Poco/Data/MySQL/Connector.h>
 #include <Poco/Data/MySQL/MySQLException.h>
@@ -55,6 +56,32 @@ namespace database
             std::cout << "statement:" << e.what() << std::endl;
             throw;
         }
+    }
+
+    std::optional<Auth> Auth::read_from_cache_by_id(long id)
+    {
+
+        try
+        {
+            std::string result;
+            if (database::Cache::get().get(id, result))
+                return fromJSON(result);
+            else
+                return std::optional<Auth>();
+        }
+        catch (std::exception& err)
+        {
+           // std::cerr << "error:" << err.what() << std::endl;
+            return std::optional<Auth>();
+        }
+    }
+
+    void Auth::save_to_cache()
+    {
+        std::stringstream ss;
+        Poco::JSON::Stringifier::stringify(toJSON(), ss);
+        std::string message = ss.str();
+        database::Cache::get().put(_id, message);
     }
 
     Poco::JSON::Object::Ptr Auth::toJSON() const
